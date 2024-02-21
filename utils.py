@@ -2,7 +2,7 @@ import pyproj
 from shapely.ops import transform
 
 
-def de_utm_selector(coordinates):
+def de_epsg_selector(coordinates):
     if isinstance(coordinates, list):
         min_lon = min(coord[0] for coord in coordinates)[0]
     else:

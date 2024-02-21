@@ -2,6 +2,12 @@
 
 This FastAPI application calculates the market share of given points within a specified city boundary.
 
+1. Reproject coordinates to utm
+2. Check the intersection of point location to city boundary
+3. Create 500m buffer 
+4. Dissolved buffer area
+5. Return the calculated the market share
+
 ## Installation
 
 1. Clone the repository

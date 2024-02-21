@@ -4,7 +4,7 @@ from typing import List, Tuple
 
 from shapely import unary_union
 from shapely.geometry import Polygon, Point
-from utils import reproject, de_utm_selector
+from utils import reproject, de_epsg_selector
 
 app = FastAPI()
 
@@ -26,18 +26,19 @@ class MarketShareRequest(BaseModel):
 
 @app.post("/market-share/")
 async def calculate_market_share(request: MarketShareRequest):
+    buffer_radius = 500
+
     # Re-projecting the city boundary to utm
     city_boundary_data = request.city_boundary.geometry.coordinates
     city_boundary = Polygon(city_boundary_data[0])
-    epsg_city = de_utm_selector(city_boundary_data)
-    city_boundary_reprojected = reproject(city_boundary, epsg_city)
+    city_boundary_epsg = de_epsg_selector(city_boundary_data)
+    city_boundary_reprojected = reproject(city_boundary, city_boundary_epsg)
 
     points_data = request.points
-    buffer_radius = 500
     buffer_geoms = []
     for point in points_data:
         # Re-projecting the points to utm
-        epsg_point = de_utm_selector(point)
+        epsg_point = de_epsg_selector(point)
         point_geom = Point(point)
         point_geom_reprojected = reproject(point_geom, epsg_point)
 
